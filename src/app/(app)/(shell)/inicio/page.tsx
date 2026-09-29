@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useApp } from "@/components/app/AppProvider";
+import { Quests } from "@/components/app/Quests";
 import { Icon } from "@/components/ui/Icon";
 import { Avatar } from "@/components/ui/Avatar";
 import { Progress, Ring, Stars } from "@/components/ui/display";
@@ -228,9 +229,65 @@ export default function HomePage() {
               </Link>
             ))}
           </section>
+
+          <div className="grid items-start gap-6 md:grid-cols-2">
+            {/* Liga */}
+            <section className="panel rounded-3xl p-5">
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="text-[15px] font-semibold tracking-tight">Liga {league.name}</h2>
+                <span className="h-3 w-3 rounded-full" style={{ background: league.color, boxShadow: `0 0 14px ${league.color}` }} />
+              </div>
+              <div className="num mt-3 text-3xl font-semibold">
+                {int(profile?.weekly_xp ?? 0)}
+                <span className="ml-1.5 text-sm font-normal text-ink-3">XP esta semana</span>
+              </div>
+              <Progress value={(profile?.weekly_xp ?? 0) / LEAGUE_UP} className="mt-3" tone={(profile?.weekly_xp ?? 0) >= LEAGUE_UP ? "good" : "white"} />
+              <p className="mt-2 text-xs leading-relaxed text-ink-3">
+                {(profile?.weekly_xp ?? 0) >= LEAGUE_UP
+                  ? "Ya aseguraste el ascenso de liga para la próxima semana."
+                  : (profile?.league ?? 1) >= 5
+                    ? "Estás en la liga más alta. Mantén el ritmo para no bajar."
+                    : `Suma ${int(LEAGUE_UP - (profile?.weekly_xp ?? 0))} XP más antes del domingo para subir de liga.`}
+              </p>
+              <Link href="/ranking" className="btn btn-ghost btn-sm mt-4 w-full">
+                Ver el ranking
+              </Link>
+            </section>
+
+            {/* Insignias */}
+            {badges && badges.length > 0 && (
+              <section className="panel rounded-3xl p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <h2 className="text-[15px] font-semibold tracking-tight">Últimas insignias</h2>
+                  <Link href="/perfil" className="text-xs text-ink-3 hover:text-ink">
+                    Ver todas
+                  </Link>
+                </div>
+                <ul className="mt-4 space-y-3">
+                  {badges.slice(0, 3).map((b) => {
+                    const a = ACHIEVEMENT_BY_KEY.get(b.key);
+                    if (!a) return null;
+                    return (
+                      <li key={b.key} className="flex items-center gap-3">
+                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/10 ring-1 ring-white/15">
+                          <Icon name={a.icon} size={16} />
+                        </span>
+                        <div className="min-w-0">
+                          <div className="truncate text-sm font-medium">{a.name}</div>
+                          <div className="truncate text-[11px] text-ink-3">{timeAgo(b.earned_at)}</div>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            )}
+          </div>
         </div>
 
         <div className="space-y-6">
+          <Quests />
+
           {/* Retos del día */}
           <section className="panel rounded-3xl p-5">
             <div className="flex items-center justify-between gap-3">
@@ -292,57 +349,6 @@ export default function HomePage() {
             </form>
           </section>
 
-          {/* Liga */}
-          <section className="panel rounded-3xl p-5">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="text-[15px] font-semibold tracking-tight">Liga {league.name}</h2>
-              <span className="h-3 w-3 rounded-full" style={{ background: league.color, boxShadow: `0 0 14px ${league.color}` }} />
-            </div>
-            <div className="num mt-3 text-3xl font-semibold">
-              {int(profile?.weekly_xp ?? 0)}
-              <span className="ml-1.5 text-sm font-normal text-ink-3">XP esta semana</span>
-            </div>
-            <Progress value={(profile?.weekly_xp ?? 0) / LEAGUE_UP} className="mt-3" tone={(profile?.weekly_xp ?? 0) >= LEAGUE_UP ? "good" : "white"} />
-            <p className="mt-2 text-xs leading-relaxed text-ink-3">
-              {(profile?.weekly_xp ?? 0) >= LEAGUE_UP
-                ? "Ya aseguraste el ascenso de liga para la próxima semana."
-                : (profile?.league ?? 1) >= 5
-                  ? "Estás en la liga más alta. Mantén el ritmo para no bajar."
-                  : `Suma ${int(LEAGUE_UP - (profile?.weekly_xp ?? 0))} XP más antes del domingo para subir de liga.`}
-            </p>
-            <Link href="/ranking" className="btn btn-ghost btn-sm mt-4 w-full">
-              Ver el ranking
-            </Link>
-          </section>
-
-          {/* Insignias */}
-          {badges && badges.length > 0 && (
-            <section className="panel rounded-3xl p-5">
-              <div className="flex items-center justify-between gap-3">
-                <h2 className="text-[15px] font-semibold tracking-tight">Últimas insignias</h2>
-                <Link href="/perfil" className="text-xs text-ink-3 hover:text-ink">
-                  Ver todas
-                </Link>
-              </div>
-              <ul className="mt-4 space-y-3">
-                {badges.slice(0, 3).map((b) => {
-                  const a = ACHIEVEMENT_BY_KEY.get(b.key);
-                  if (!a) return null;
-                  return (
-                    <li key={b.key} className="flex items-center gap-3">
-                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/10 ring-1 ring-white/15">
-                        <Icon name={a.icon} size={16} />
-                      </span>
-                      <div className="min-w-0">
-                        <div className="truncate text-sm font-medium">{a.name}</div>
-                        <div className="truncate text-[11px] text-ink-3">{timeAgo(b.earned_at)}</div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          )}
         </div>
       </div>
     </div>

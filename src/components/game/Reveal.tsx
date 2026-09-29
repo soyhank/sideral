@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, ChevronsUp, Crown, Flame, Trophy } from "lucide-react";
+import { ArrowRight, ChevronsUp, Crown, Flame, Share2, Trophy } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { GameState, RoundResult } from "@/engine/types";
@@ -319,6 +319,19 @@ function FinalView({ game, rewards, profit, tsr }: { game: GameRow; rewards: Rew
         </div>
       </div>
       {game.mode === "torneo" && <p className="mt-4 text-xs text-ink-3">Tu puntaje ya cuenta en la tabla del torneo.</p>}
+      <button
+        className="btn btn-quiet btn-sm mt-4"
+        onClick={async () => {
+          const text = `${f?.rank === 1 ? "Gané" : `Terminé en el puesto ${f?.rank}`} dirigiendo una empresa en Sideral: ${f?.score} puntos y ${pct(tsr, 0)} de retorno al accionista. ¿Me superas?`;
+          try {
+            if (navigator.share) await navigator.share({ title: "Sideral", text, url: window.location.origin });
+            else await navigator.clipboard.writeText(`${text} ${window.location.origin}`);
+          } catch {}
+        }}
+      >
+        <Share2 size={15} />
+        Compartir mi resultado
+      </button>
     </div>
   );
 }

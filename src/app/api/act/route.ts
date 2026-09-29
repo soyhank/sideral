@@ -3,6 +3,7 @@ import { userFromRequest } from "@/lib/supabase/server";
 import { ActionError } from "@/lib/game/types";
 import * as service from "@/lib/game/service";
 import * as extras from "@/lib/game/extras";
+import * as quests from "@/lib/game/quests";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -31,6 +32,9 @@ const ACTIONS: Record<string, Handler> = {
   "room.status": (u, b) => service.roomStatus(u, s(b.roomId)),
   "room.rewards": async (u, b) => ({ rewards: await service.roundRewards(u, s(b.gameId), Number(b.round)) }),
 
+  "quests.get": (u) => quests.getQuests(u),
+  "quests.claim": (u, b) => quests.claimQuest(u, s(b.id)),
+
   "daily.get": (u) => extras.getDaily(u),
   "daily.submit": (u, b) => extras.submitDaily(u, s(b.kind) as extras.DailyKind, b.answers),
   "training.get": async (_u, b) => ({ questions: await extras.trainingSet(s(b.topic), Number(b.level) || 0) }),
@@ -49,11 +53,26 @@ const ACTIONS: Record<string, Handler> = {
   "classroom.report": (u, b) => extras.classroomReport(u, s(b.classroomId)),
 };
 
+/** Freno simple por persona: evita ráfagas por error o abuso. Vive en la memoria de cada instancia. */
+const hits = new Map<string, number[]>();
+const WINDOW = 60_000;
+const LIMIT = 150;
+
+function allowed(userId: string): boolean {
+  const now = Date.now();
+  const list = (hits.get(userId) ?? []).filter((t) => now - t < WINDOW);
+  list.push(now);
+  hits.set(userId, list);
+  if (hits.size > 5000) for (const [k, v] of hits) if (!v.length || now - v[v.length - 1] > WINDOW) hits.delete(k);
+  return list.length <= LIMIT;
+}
+
 export async function POST(req: Request) {
   const started = Date.now();
   try {
     const userId = await userFromRequest(req);
     if (!userId) return NextResponse.json({ error: "Tu sesión venció. Vuelve a ingresar." }, { status: 401 });
+    if (!allowed(userId)) return NextResponse.json({ error: "Demasiadas acciones seguidas. Espera un momento." }, { status: 429 });
     const body = (await req.json().catch(() => null)) as (Body & { action?: string }) | null;
     const handler = body?.action ? ACTIONS[body.action] : undefined;
     if (!body || !handler) return NextResponse.json({ error: "Acción desconocida." }, { status: 400 });

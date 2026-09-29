@@ -17,7 +17,7 @@ import {
 import { channelEffect, clamp, derive, fxFactor, productScale, quarterRate, r2, r4, refPrice } from "./derive";
 import { getIndustry, hasInventory } from "./industries";
 import { hashSeed, makeRng } from "./rng";
-import { scorecard } from "./score";
+import { expectedMargin, scorecard } from "./score";
 import { sanitize } from "./setup";
 import type {
   ActiveNews,
@@ -183,6 +183,9 @@ export function processRound(
   const q = (round - 1) % 4;
   const inventoryModel = hasInventory(ind);
   const useScript = !projection && script !== null && s.modules.includes("situaciones");
+  // Los montos de las situaciones se expresan sobre la venta base. Se moderan según el margen
+  // del rubro: 3 % de la venta pesa muy distinto en una concesionaria que en una consultora.
+  const cashScale = d.r0 * 0.6 * clamp(expectedMargin(ind) / 0.12, 0.35, 1.3);
   const dilemma = useScript ? script!.dilemma : null;
   const news = useScript ? script!.news : null;
 
@@ -274,13 +277,13 @@ export function processRound(
         opt = worstOption(dilemma);
         w.notes.push("No respondiste la situación del trimestre y los hechos decidieron por ti.");
       }
-      let cash = ((opt.effects.cashPct ?? 0) / 100) * d.r0;
+      let cash = ((opt.effects.cashPct ?? 0) / 100) * cashScale;
       applyPoints(c, opt.effects);
       pushEffect(c, dilemma.id, opt.effects);
       let riskHit = false;
       if (opt.risk && rng.chance(opt.risk.prob)) {
         riskHit = true;
-        cash += ((opt.risk.effects.cashPct ?? 0) / 100) * d.r0;
+        cash += ((opt.risk.effects.cashPct ?? 0) / 100) * cashScale;
         applyPoints(c, opt.risk.effects);
         pushEffect(c, `${dilemma.id}-riesgo`, opt.risk.effects);
       }

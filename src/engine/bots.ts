@@ -28,7 +28,7 @@ const STYLES: Record<BotStyle, Style> = {
   conservador: { price: 1.03, marketing: 0.8, quality: 0.6, efficiency: 0.5, salary: 1.02, training: 0.7, expandAt: 0, launchAt: 9, premiumFirst: false },
 };
 
-const SKILL = [0, 0.5, 0.75, 0.9, 1];
+const SKILL = [0, 0.64, 0.78, 0.9, 1];
 
 const VERDICT_RANK: Record<Verdict, number> = { optima: 3, buena: 2, riesgosa: 1, mala: 0 };
 

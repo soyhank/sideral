@@ -197,6 +197,23 @@ async function main() {
   check("quien dirige puede forzar el cierre", forced.processed);
   await act(profe, "game.abandon", { gameId: big.id });
 
+  console.log("\n7b. Cierre automático por plazo vencido");
+  const timed = await act<{ id: string; code: string }>(profe, "room.create", { name: "Sala con plazo", industry: "gimnasio", difficulty: 2, rounds: 3, teamMode: "individual", timerMinutes: 5, autoAdvance: false, hostPlays: false });
+  for (const u of [ana, beto]) await act(u, "room.join", { code: timed.code });
+  await act(profe, "room.start", { roomId: timed.id });
+  const dl0 = await act<{ deadline: string | null }>(ana, "room.status", { roomId: timed.id });
+  check("la sala tiene plazo", !!dl0.deadline && new Date(dl0.deadline).getTime() > Date.now());
+  const before = await act<{ processed: boolean }>(ana, "room.close", { roomId: timed.id });
+  check("un participante no puede cerrar antes del plazo", before.processed === false);
+  await admin.from("games").update({ deadline: new Date(Date.now() - 1000).toISOString() }).eq("id", timed.id);
+  const after = await act<{ processed: boolean }>(ana, "room.close", { roomId: timed.id });
+  check("vencido el plazo, el trimestre se cierra solo", after.processed === true);
+  const dl1 = await act<{ round: number; deadline: string | null }>(ana, "room.status", { roomId: timed.id });
+  check("el siguiente trimestre recibe un plazo nuevo", dl1.round === 2 && !!dl1.deadline && new Date(dl1.deadline).getTime() > Date.now());
+  const twice = await act<{ processed: boolean }>(beto, "room.close", { roomId: timed.id });
+  check("no se cierra dos veces", twice.processed === false);
+  await act(profe, "game.abandon", { gameId: timed.id });
+
   console.log("\n8. Retos del día");
   const daily = await act<{ trivia: { questions: { id: string }[] }; dilema: { dilemma: { options: { id: string }[] } }; foda: { case: { items: { key: number }[] } }; calculo: { problems: unknown[] } }>(dani, "daily.get");
   check("entrega los cuatro retos", daily.trivia.questions.length === 5 && daily.foda.case.items.length === 8 && daily.calculo.problems.length === 3);

@@ -62,7 +62,7 @@ export const MISSIONS: Mission[] = [
     size: 3,
     modules: [],
     goals: [{ metric: "profit", value: 0, label: "Termina el año con utilidad acumulada" }],
-    stars: [590, 625],
+    stars: [595, 630],
   },
   {
     id: "m02",
@@ -154,7 +154,7 @@ export const MISSIONS: Mission[] = [
       { metric: "quality", value: 62, label: "Calidad de 62 o más" },
       { metric: "satisfaction", value: 64, label: "Satisfacción de 64 o más" },
     ],
-    stars: [660, 760],
+    stars: [660, 750],
   },
   {
     id: "m07",
@@ -189,7 +189,7 @@ export const MISSIONS: Mission[] = [
     size: 5,
     modules: ["marketing", "personas", "finanzas", "calidad", "situaciones"],
     goals: [{ metric: "rank", value: 2, label: "Termina entre los dos primeros" }],
-    stars: [570, 650],
+    stars: [570, 640],
   },
   {
     id: "m09",

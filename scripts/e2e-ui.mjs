@@ -132,6 +132,43 @@ try {
   await page.waitForTimeout(400);
   await shot(page, "finanzas-tributos", true);
 
+  console.log("Misión completa hasta el cierre");
+  for (let r = 2; r <= 4; r++) {
+    await page.getByRole("tab", { name: "Decisiones" }).click();
+    await page.getByRole("button", { name: "Igualar a la demanda proyectada" }).click();
+    await page.waitForTimeout(300);
+    await page.getByRole("button", { name: "Cerrar trimestre" }).first().click();
+    await page.getByRole("dialog").getByRole("button", { name: "Cerrar trimestre" }).click();
+    await page.getByText(/Cerraste con/).waitFor({ timeout: 20000 });
+    if (r < 4) {
+      await page.getByRole("button", { name: "Saltar" }).click();
+      await page.waitForTimeout(500);
+    }
+  }
+  for (let i = 0; i < 4; i++) {
+    const next = page.getByRole("button", { name: "Continuar" });
+    if (!(await next.count())) break;
+    await next.click();
+    await page.waitForTimeout(900);
+  }
+  await page.getByText(/Misión cumplida|Misión no superada/).waitFor({ timeout: 15000 });
+  await page.waitForTimeout(1200);
+  await shot(page, "mision-final");
+  await page.getByRole("link", { name: "Continuar" }).click();
+  await page.waitForURL("**/carrera", { timeout: 15000 });
+  await page.waitForTimeout(1200);
+  await shot(page, "carrera-con-estrellas", true);
+  await page.goto(`${BASE}/inicio`, { waitUntil: "networkidle" });
+  await page.getByText("Misiones de hoy").waitFor({ timeout: 15000 });
+  await page.waitForTimeout(1500);
+  const claim = page.getByRole("button", { name: /^\+\d+/ });
+  if (await claim.count()) {
+    await claim.first().click();
+    await page.getByText(/Misión cumplida: \+/).waitFor({ timeout: 15000 });
+  }
+  await page.waitForTimeout(1500);
+  await shot(page, "inicio-con-progreso", true);
+
   console.log("Simulación libre con todas las áreas");
   await page.goto(`${BASE}/jugar`, { waitUntil: "networkidle" });
   await page.getByRole("radio", { name: /Licencias de software/ }).click();
@@ -203,7 +240,7 @@ try {
   await m.waitForURL("**/inicio", { timeout: 20000 });
   await m.waitForTimeout(1500);
   await shot(m, "cel-inicio", true);
-  await m.getByRole("link", { name: /Dulce Valeria/ }).first().click();
+  await m.getByRole("link", { name: /Simulación libre · Software/ }).first().click();
   await m.waitForURL("**/partida/**", { timeout: 20000 });
   await m.waitForTimeout(1500);
   await shot(m, "cel-partida");

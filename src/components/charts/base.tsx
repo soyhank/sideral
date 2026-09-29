@@ -8,7 +8,7 @@ export const SERIES = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#
 export const SELF = "#f5f5f7";
 export const GRID = "rgba(255,255,255,0.07)";
 export const AXIS = "rgba(255,255,255,0.16)";
-export const MUTED = "rgba(245,245,247,0.45)";
+export const MUTED = "rgba(245,245,247,0.6)";
 
 /** Color de una empresa: la propia siempre en blanco, las demás por su posición. */
 export function companyColor(idx: number, self: number): string {

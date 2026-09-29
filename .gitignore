@@ -43,3 +43,5 @@ next-env.d.ts
 # claves locales
 .env*
 !.env.example
+
+.vercel

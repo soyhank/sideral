@@ -46,7 +46,7 @@ export function BcgMatrix({ points }: { points: BcgPoint[] }) {
             <line x1={pad.l + w / 2} x2={pad.l + w / 2} y1={pad.t} y2={pad.t + h} stroke="rgba(255,255,255,0.14)" />
             <line x1={pad.l} x2={pad.l + w} y1={pad.t + h / 2} y2={pad.t + h / 2} stroke="rgba(255,255,255,0.14)" />
             {quads.map((q) => (
-              <text key={q.name} x={q.x} y={q.y} fontSize={11} fontWeight={600} fill="rgba(245,245,247,0.34)" letterSpacing="0.06em">
+              <text key={q.name} x={q.x} y={q.y} fontSize={11} fontWeight={600} fill="rgba(245,245,247,0.5)" letterSpacing="0.06em">
                 {q.name.toUpperCase()}
               </text>
             ))}

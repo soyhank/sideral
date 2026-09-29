@@ -8,11 +8,12 @@ import { Segmented } from "@/components/ui/controls";
 import { PageHeader, Progress, Spinner } from "@/components/ui/display";
 import { Icon } from "@/components/ui/Icon";
 import { useToast } from "@/components/ui/Toast";
-import { INDUSTRIES } from "@/engine/industries";
+import { INDUSTRIES, getIndustry } from "@/engine/industries";
+import Link from "next/link";
 import { act, ApiError } from "@/lib/api";
 import { cx, int } from "@/lib/format";
 import { ACHIEVEMENTS, AVATARS, AVATAR_LEVEL, leagueOf, levelProgress, titleFor } from "@/lib/gamification";
-import { useAchievements } from "@/lib/hooks";
+import { useAchievements, useMyGames } from "@/lib/hooks";
 
 const TIER = { bronce: "#c98a5e", plata: "#c9d1dc", oro: "#f2c94c" };
 
@@ -20,6 +21,7 @@ export default function ProfilePage() {
   const { profile, userId, email, patch, refresh, signOut } = useApp();
   const { toast } = useToast();
   const { data: earned } = useAchievements(userId);
+  const { data: games } = useMyGames(userId, 40);
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [institution, setInstitution] = useState("");
@@ -43,6 +45,17 @@ export default function ProfilePage() {
   const lp = levelProgress(profile.xp);
   const have = new Set((earned ?? []).map((e) => e.key));
   const played = Array.isArray(profile.stats?.industries) ? (profile.stats.industries as string[]) : [];
+  const records = Object.values(
+    (games ?? [])
+      .filter((g) => g.status === "finalizada" && g.score !== null)
+      .reduce<Record<string, { industry: string; score: number; games: number; wins: number }>>((acc, g) => {
+        const r = (acc[g.industry] ??= { industry: g.industry, score: 0, games: 0, wins: 0 });
+        r.score = Math.max(r.score, g.score ?? 0);
+        r.games += 1;
+        if (g.rank === 1) r.wins += 1;
+        return acc;
+      }, {}),
+  ).sort((a, b) => b.score - a.score);
   const dirty = name.trim() !== profile.display_name || username.trim() !== profile.username || institution.trim() !== (profile.institution ?? "");
 
   const save = async (body: Record<string, unknown>, optimistic: Record<string, unknown>, ok: string) => {
@@ -134,6 +147,36 @@ export default function ProfilePage() {
             })}
         </div>
       </section>
+
+      {records.length > 0 && (
+        <section className="mt-6">
+          <div className="mb-3 flex items-baseline justify-between">
+            <h2 className="text-sm font-semibold text-ink-2">Mis récords por industria</h2>
+            <span className="num text-xs text-ink-3">
+              {played.length} de {INDUSTRIES.length} rubros
+            </span>
+          </div>
+          <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+            {records.map((r) => {
+              const ind = getIndustry(r.industry);
+              return (
+                <Link key={r.industry} href={`/jugar?industria=${r.industry}`} className="panel panel-hover flex items-center gap-3 rounded-2xl p-4">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/8 ring-1 ring-white/10">
+                    <Icon name={ind.icon} size={18} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium">{ind.short}</span>
+                    <span className="num block text-[11px] text-ink-3">
+                      {r.games} {r.games === 1 ? "partida" : "partidas"} · {r.wins} {r.wins === 1 ? "victoria" : "victorias"}
+                    </span>
+                  </span>
+                  <span className="num text-lg font-semibold">{r.score}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       <section className="panel mt-6 rounded-3xl p-5 sm:p-6">
         <h2 className="text-[15px] font-semibold tracking-tight">Avatar</h2>
