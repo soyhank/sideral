@@ -160,7 +160,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 aria-current={active(n.href) ? "page" : undefined}
                 className={cx(
                   "flex h-10 items-center gap-3 rounded-xl px-3 text-sm font-medium transition",
-                  active(n.href) ? "bg-white text-[#09090b] shadow-[0_8px_24px_-10px_rgba(255,255,255,0.5)]" : "text-ink-2 hover:bg-white/6 hover:text-ink",
+                  active(n.href) ? "bg-accent text-white shadow-[0_8px_24px_-10px_rgba(109,125,255,0.9)]" : "text-ink-2 hover:bg-white/6 hover:text-ink",
                 )}
               >
                 <n.icon size={17} strokeWidth={2} />
@@ -218,7 +218,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
               aria-current={active(n.href) ? "page" : undefined}
               className={cx("flex flex-1 flex-col items-center justify-center gap-1 rounded-2xl text-[10.5px] font-medium transition", active(n.href) ? "text-white" : "text-ink-3")}
             >
-              <span className={cx("grid h-8 w-12 place-items-center rounded-full transition", active(n.href) && "bg-white/14")}>
+              <span className={cx("grid h-8 w-12 place-items-center rounded-full transition", active(n.href) && "bg-accent/25 text-accent-2")}>
                 <n.icon size={19} strokeWidth={active(n.href) ? 2.4 : 2} />
               </span>
               {n.label === "Simulación libre" ? "Jugar" : n.label === "Retos del día" ? "Retos" : n.label}

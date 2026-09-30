@@ -8,7 +8,7 @@ import { useApp } from "@/components/app/AppProvider";
 import { DEFAULT_SETUP, IndustryPicker, SetupForm, type SetupValue } from "@/components/app/GameSetup";
 import { Segmented, Toggle } from "@/components/ui/controls";
 import { Empty, PageHeader, Spinner } from "@/components/ui/display";
-import { Icon } from "@/components/ui/Icon";
+import { IndustryTile } from "@/components/ui/Icon";
 import { Modal } from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/Toast";
 import { getIndustry } from "@/engine/industries";
@@ -166,9 +166,7 @@ function Rooms() {
               const st = STATUS[h.status];
               return (
                 <Link key={h.id} href={`/sala/${h.code}`} className="panel panel-hover flex items-center gap-3.5 rounded-3xl p-5">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/8 ring-1 ring-white/10">
-                    <Icon name={ind.icon} size={20} />
-                  </span>
+                  <IndustryTile id={ind.id} />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="truncate text-[15px] font-semibold">{h.name}</span>
@@ -187,9 +185,7 @@ function Rooms() {
               const st = STATUS[g.status];
               return (
                 <Link key={g.id} href={g.status === "lobby" ? `/sala/${g.code}` : `/partida/${g.id}`} className="panel panel-hover flex items-center gap-3.5 rounded-3xl p-5">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/8 ring-1 ring-white/10">
-                    <Icon name={ind.icon} size={20} />
-                  </span>
+                  <IndustryTile id={ind.id} />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="truncate text-[15px] font-semibold">{g.name}</span>

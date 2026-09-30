@@ -80,9 +80,9 @@ export function Stat({
   );
 }
 
-export function Progress({ value, className, tone = "white", height = 6 }: { value: number; className?: string; tone?: "white" | "good" | "warn" | "bad"; height?: number }) {
+export function Progress({ value, className, tone = "white", height = 6 }: { value: number; className?: string; tone?: "white" | "accent" | "good" | "warn" | "bad"; height?: number }) {
   const v = Math.min(1, Math.max(0, value || 0));
-  const color = { white: "bg-white", good: "bg-good", warn: "bg-warn", bad: "bg-bad" }[tone];
+  const color = { white: "bg-accent", accent: "bg-accent", good: "bg-good", warn: "bg-warn", bad: "bg-bad" }[tone];
   return (
     <div className={cx("overflow-hidden rounded-full bg-white/10", className)} style={{ height }} role="progressbar" aria-valuenow={Math.round(v * 100)} aria-valuemin={0} aria-valuemax={100}>
       <div className={cx("h-full rounded-full transition-[width] duration-700 ease-out", color)} style={{ width: `${v * 100}%` }} />
@@ -96,7 +96,7 @@ export function Ring({
   stroke = 6,
   children,
   className,
-  color = "#ffffff",
+  color = "#6d7dff",
 }: {
   value: number;
   size?: number;

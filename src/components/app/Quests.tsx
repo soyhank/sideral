@@ -47,8 +47,10 @@ export function Quests() {
   return (
     <section className="panel rounded-3xl p-5">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-[15px] font-semibold tracking-tight">
-          <Target size={17} />
+        <h2 className="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight">
+          <span className="icon-accent grid h-8 w-8 place-items-center rounded-xl">
+            <Target size={16} />
+          </span>
           Misiones de hoy
         </h2>
         <span className="chip num">{done} de 3</span>

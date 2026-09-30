@@ -6,7 +6,7 @@ import { useApp } from "@/components/app/AppProvider";
 import { Avatar } from "@/components/ui/Avatar";
 import { Segmented } from "@/components/ui/controls";
 import { PageHeader, Progress, Spinner } from "@/components/ui/display";
-import { Icon } from "@/components/ui/Icon";
+import { Icon, IndustryTile } from "@/components/ui/Icon";
 import { useToast } from "@/components/ui/Toast";
 import { INDUSTRIES, getIndustry } from "@/engine/industries";
 import Link from "next/link";
@@ -161,9 +161,7 @@ export default function ProfilePage() {
               const ind = getIndustry(r.industry);
               return (
                 <Link key={r.industry} href={`/jugar?industria=${r.industry}`} className="panel panel-hover flex items-center gap-3 rounded-2xl p-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/8 ring-1 ring-white/10">
-                    <Icon name={ind.icon} size={18} />
-                  </span>
+                  <IndustryTile id={ind.id} box={40} size={18} radius={12} />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium">{ind.short}</span>
                     <span className="num block text-[11px] text-ink-3">

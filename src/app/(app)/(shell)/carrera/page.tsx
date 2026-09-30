@@ -4,7 +4,7 @@ import { ArrowRight, Check, Clock, Lock, Target } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useApp } from "@/components/app/AppProvider";
-import { Icon } from "@/components/ui/Icon";
+import { Icon, IndustryTile } from "@/components/ui/Icon";
 import { PageHeader, Spinner, Stars } from "@/components/ui/display";
 import { Modal } from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/Toast";
@@ -120,9 +120,13 @@ function Career() {
                       className={cx("panel rounded-3xl p-5 text-left transition", can ? "panel-hover" : "cursor-not-allowed opacity-45", (r?.stars ?? 0) === 0 && can && "!border-white/30")}
                     >
                       <div className="flex items-start justify-between gap-2">
-                        <span className={cx("grid h-11 w-11 place-items-center rounded-2xl ring-1", (r?.stars ?? 0) > 0 ? "bg-white text-black ring-white" : "bg-white/8 ring-white/10")}>
-                          {can ? <Icon name={mi.icon} size={20} /> : <Lock size={17} />}
-                        </span>
+                        {can ? (
+                          <IndustryTile id={mi.id} solid={(r?.stars ?? 0) > 0} />
+                        ) : (
+                          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white/8 ring-1 ring-white/10">
+                            <Lock size={17} />
+                          </span>
+                        )}
                         <span className="num text-xs text-ink-4">{String(m.order).padStart(2, "0")}</span>
                       </div>
                       <h3 className="mt-4 text-[15px] leading-snug font-semibold">{m.title}</h3>

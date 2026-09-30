@@ -8,7 +8,7 @@ import useSWR from "swr";
 import { useApp } from "@/components/app/AppProvider";
 import { Avatar } from "@/components/ui/Avatar";
 import { Empty, Spinner } from "@/components/ui/display";
-import { Icon } from "@/components/ui/Icon";
+import { IndustryTile } from "@/components/ui/Icon";
 import { useToast } from "@/components/ui/Toast";
 import { DIFFICULTY_NAMES } from "@/engine/constants";
 import { getIndustry } from "@/engine/industries";
@@ -92,9 +92,7 @@ export default function TournamentPage() {
 
       <section className="glass rounded-[2rem] p-6 sm:p-8">
         <div className="flex flex-wrap items-start gap-5">
-          <span className="grid h-16 w-16 shrink-0 place-items-center rounded-3xl bg-white text-black">
-            <Icon name={ind.icon} size={28} />
-          </span>
+          <IndustryTile id={ind.id} box={64} size={28} radius={22} solid />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap gap-1.5">
               {t.official && <span className="chip chip-white">Oficial</span>}

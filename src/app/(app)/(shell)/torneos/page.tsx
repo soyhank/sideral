@@ -8,7 +8,7 @@ import { useApp } from "@/components/app/AppProvider";
 import { DEFAULT_SETUP, IndustryPicker, SetupForm, type SetupValue } from "@/components/app/GameSetup";
 import { Segmented } from "@/components/ui/controls";
 import { Empty, PageHeader, Spinner } from "@/components/ui/display";
-import { Icon } from "@/components/ui/Icon";
+import { IndustryTile } from "@/components/ui/Icon";
 import { Modal } from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/Toast";
 import { DIFFICULTY_NAMES } from "@/engine/constants";
@@ -66,9 +66,7 @@ export default function TournamentsPage() {
     return (
       <Link href={`/torneos/${t.id}`} className={cx("panel panel-hover block rounded-3xl p-5", t.official && !closed && "!border-white/30")}>
         <div className="flex items-start gap-3.5">
-          <span className={cx("grid h-12 w-12 shrink-0 place-items-center rounded-2xl ring-1", t.official && !closed ? "bg-white text-black ring-white" : "bg-white/8 ring-white/10")}>
-            <Icon name={ind.icon} size={21} />
-          </span>
+          <IndustryTile id={ind.id} box={48} size={21} radius={16} solid={t.official && !closed} />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="truncate text-[15px] font-semibold">{t.name}</h3>

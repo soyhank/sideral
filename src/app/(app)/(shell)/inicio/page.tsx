@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useApp } from "@/components/app/AppProvider";
 import { Quests } from "@/components/app/Quests";
-import { Icon } from "@/components/ui/Icon";
+import { Icon, IndustryTile } from "@/components/ui/Icon";
 import { Avatar } from "@/components/ui/Avatar";
 import { Progress, Ring, Stars } from "@/components/ui/display";
 import { Modal } from "@/components/ui/Modal";
@@ -157,9 +157,7 @@ export default function HomePage() {
                   return (
                     <Link key={g.id} href={g.status === "lobby" ? `/sala/${g.code}` : `/partida/${g.id}`} className="panel panel-hover rounded-3xl p-5">
                       <div className="flex items-start gap-3.5">
-                        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/8 ring-1 ring-white/10">
-                          <Icon name={ind.icon} size={20} />
-                        </span>
+                        <IndustryTile id={ind.id} />
                         <div className="min-w-0 flex-1">
                           <div className="truncate text-[15px] font-semibold">{g.company || g.name}</div>
                           <div className="truncate text-xs text-ink-3">
@@ -183,7 +181,7 @@ export default function HomePage() {
           {/* Carrera */}
           <section className="panel overflow-hidden rounded-3xl">
             <div className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center">
-              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white text-black">
+              <span className="icon-accent grid h-14 w-14 shrink-0 place-items-center rounded-2xl">
                 <Route size={24} />
               </span>
               <div className="min-w-0 flex-1">
@@ -222,7 +220,9 @@ export default function HomePage() {
               { href: "/duelos", icon: Swords, title: "Duelo", text: "Reta a un compañero", time: "10 min" },
             ].map((m) => (
               <Link key={m.href} href={m.href} className="panel panel-hover rounded-3xl p-5">
-                <m.icon size={20} className="text-ink-2" />
+                <span className="icon-accent grid h-10 w-10 place-items-center rounded-xl">
+                  <m.icon size={19} />
+                </span>
                 <div className="mt-3 text-[15px] font-semibold">{m.title}</div>
                 <div className="mt-0.5 text-xs leading-relaxed text-ink-3">{m.text}</div>
                 <div className="chip mt-3">{m.time}</div>
@@ -291,8 +291,10 @@ export default function HomePage() {
           {/* Retos del día */}
           <section className="panel rounded-3xl p-5">
             <div className="flex items-center justify-between gap-3">
-              <h2 className="flex items-center gap-2 text-[15px] font-semibold tracking-tight">
-                <CalendarCheck size={17} />
+              <h2 className="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight">
+                <span className="icon-accent grid h-8 w-8 place-items-center rounded-xl">
+                  <CalendarCheck size={16} />
+                </span>
                 Retos de hoy
               </h2>
               <span className="chip num">
@@ -323,8 +325,10 @@ export default function HomePage() {
 
           {/* Unirse a sala */}
           <section className="panel rounded-3xl p-5">
-            <h2 className="flex items-center gap-2 text-[15px] font-semibold tracking-tight">
-              <Users size={17} />
+            <h2 className="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight">
+              <span className="icon-accent grid h-8 w-8 place-items-center rounded-xl">
+                <Users size={16} />
+              </span>
               Entrar a una sala
             </h2>
             <p className="mt-1 text-xs leading-relaxed text-ink-3">Escribe el código que te dio tu docente o tu compañero.</p>

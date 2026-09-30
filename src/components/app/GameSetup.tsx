@@ -4,7 +4,7 @@ import { Check, Clock, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import profiles from "@/content/industries/fichas";
 import { Segmented, Toggle } from "@/components/ui/controls";
-import { Icon } from "@/components/ui/Icon";
+import { Icon, IndustryTile, industryColor } from "@/components/ui/Icon";
 import { DIFFICULTY_NAMES, MODULE_NAMES } from "@/engine/constants";
 import { INDUSTRIES, baseRevenue } from "@/engine/industries";
 import { MODULE_IDS, type IndustryId, type ModuleId } from "@/engine/types";
@@ -59,7 +59,7 @@ export function IndustryPicker({ value, onChange }: { value: IndustryId | null; 
                   <Check size={12} strokeWidth={3} />
                 </span>
               )}
-              <Icon name={i.icon} size={21} className="text-ink-2" />
+              <Icon name={i.icon} size={21} style={{ color: industryColor(i.id) }} />
               <div className="mt-3 text-sm leading-tight font-semibold">{i.name}</div>
               <div className="mt-2 flex flex-wrap gap-1">
                 <span className="chip !h-5 !px-1.5 !text-[10px]">{i.kind}</span>
@@ -74,9 +74,7 @@ export function IndustryPicker({ value, onChange }: { value: IndustryId | null; 
       {chosen && (
         <div className="glass mt-5 animate-rise rounded-3xl p-5" key={chosen.id}>
           <div className="flex flex-wrap items-start gap-4">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white text-black">
-              <Icon name={chosen.icon} size={22} />
-            </span>
+            <IndustryTile id={chosen.id} box={48} size={22} radius={16} solid />
             <div className="min-w-0 flex-1">
               <h3 className="text-lg font-semibold tracking-tight">{chosen.name}</h3>
               <p className="text-sm text-ink-3">{chosen.tagline}</p>

@@ -1,6 +1,6 @@
 import { ArrowRight, BarChart3, BookOpen, CalendarCheck, Compass, Landmark, LineChart, Megaphone, Presentation, Route, Scale, Search, Swords, Trophy, Users, Wallet } from "lucide-react";
 import Link from "next/link";
-import { Icon } from "@/components/ui/Icon";
+import { Icon, industryColor } from "@/components/ui/Icon";
 import { Logo } from "@/components/ui/Logo";
 import { INDUSTRIES } from "@/engine/industries";
 
@@ -125,7 +125,7 @@ export default function Landing() {
           <ul className="mt-10 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
             {INDUSTRIES.map((i) => (
               <li key={i.id} className="panel flex items-center gap-3 rounded-2xl px-4 py-3.5">
-                <Icon name={i.icon} size={19} className="shrink-0 text-ink-2" />
+                <Icon name={i.icon} size={19} className="shrink-0" style={{ color: industryColor(i.id) }} />
                 <span className="min-w-0">
                   <span className="block truncate text-sm font-medium">{i.name}</span>
                   <span className="block text-[11px] text-ink-3">{i.kind === "B2C" ? "Al consumidor" : "A empresas"}</span>

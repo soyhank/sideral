@@ -7,7 +7,7 @@ import useSWR from "swr";
 import { useApp } from "@/components/app/AppProvider";
 import { Avatar } from "@/components/ui/Avatar";
 import { Empty, PageHeader, Spinner } from "@/components/ui/display";
-import { Icon } from "@/components/ui/Icon";
+import { Icon, industryColor } from "@/components/ui/Icon";
 import { useToast } from "@/components/ui/Toast";
 import { INDUSTRIES, getIndustry } from "@/engine/industries";
 import { act, ApiError } from "@/lib/api";
@@ -147,7 +147,7 @@ function Duels() {
               <li key={d.id} className={cx("panel rounded-3xl p-5", won && "!border-good/40")}>
                 <div className="flex items-center justify-between gap-2 text-xs text-ink-3">
                   <span className="flex items-center gap-1.5">
-                    <Icon name={ind.icon} size={13} />
+                    <Icon name={ind.icon} size={13} style={{ color: industryColor(ind.id) }} />
                     {ind.name} · {d.rounds} trimestres
                   </span>
                   <span>{timeAgo(d.created_at)}</span>

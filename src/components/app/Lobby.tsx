@@ -8,7 +8,7 @@ import useSWR from "swr";
 import { useApp } from "@/components/app/AppProvider";
 import { Avatar } from "@/components/ui/Avatar";
 import { Empty, Spinner } from "@/components/ui/display";
-import { Icon } from "@/components/ui/Icon";
+import { IndustryTile } from "@/components/ui/Icon";
 import { Modal } from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/Toast";
 import { DIFFICULTY_NAMES, MODULE_NAMES } from "@/engine/constants";
@@ -170,9 +170,7 @@ export function Lobby({ code }: { code: string }) {
 
           <section className="panel rounded-3xl p-5">
             <div className="flex items-center gap-3.5">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/8 ring-1 ring-white/10">
-                <Icon name={ind.icon} size={20} />
-              </span>
+              <IndustryTile id={ind.id} />
               <div className="min-w-0">
                 <h1 className="truncate text-lg font-semibold tracking-tight">{room.name}</h1>
                 <p className="truncate text-sm text-ink-3">{ind.name}</p>

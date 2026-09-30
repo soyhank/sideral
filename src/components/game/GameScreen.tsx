@@ -4,7 +4,7 @@ import { ArrowLeft, BarChart3, ChartLine, Check, CircleDollarSign, Compass, Flag
 import Link from "next/link";
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { useApp } from "@/components/app/AppProvider";
-import { Icon } from "@/components/ui/Icon";
+import { IndustryTile } from "@/components/ui/Icon";
 import { Empty, Spinner } from "@/components/ui/display";
 import { Modal } from "@/components/ui/Modal";
 import { useToast } from "@/components/ui/Toast";
@@ -376,9 +376,7 @@ function Inner({ data, refetch, setData }: { data: GameData; refetch: () => Prom
               <Link href={back} className="btn btn-ghost btn-icon btn-sm shrink-0" aria-label="Salir de la partida">
                 <ArrowLeft size={17} />
               </Link>
-              <span className="hidden h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/8 ring-1 ring-white/10 sm:grid">
-                <Icon name={ind.icon} size={19} />
-              </span>
+              <IndustryTile id={ind.id} box={40} size={19} radius={12} className="!hidden sm:!grid" />
               <div className="min-w-0 flex-1">
                 <h1 className="truncate text-[15px] font-semibold tracking-tight">{spectator ? game.name : me.name}</h1>
                 <div className="flex flex-wrap items-center gap-x-2 text-xs text-ink-3">
